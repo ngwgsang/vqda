@@ -10,7 +10,7 @@ setuptools.setup(
     long_description="Vietnamese question augmentation",
     url="https://github.com/sangcamap/vqda.git",
     packages=setuptools.find_packages(),
-    install_requires=['transformers', 'sentencepiece', 'underthesea', 'gensim', 'random', 'simplet5'],
+    install_requires=['transformers', 'sentencepiece', 'underthesea', 'gensim', 'simplet5'],
     classifiers=[
         "Programming Language :: Python :: 3.7",
         "License :: Apache 2.0",
