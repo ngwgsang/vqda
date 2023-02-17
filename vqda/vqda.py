@@ -25,12 +25,12 @@ class vqda:
         try:
           self.we_model = Word2Vec.load(we_model)
         except:
-          print(f"Can't use {we_model}")
+          raise Exception(f"Can't use {we_model}")
         
         try:
-          self.qr_model = SimpleT5.load_model("t5", qr_model, use_gpu = gpu)
+          self.qr_model = SimpleT5().load_model("t5", qr_model, use_gpu = gpu)
         except:
-          print(f"Can't use {qr_model}")
+          raise Exception(f"Can't use {qr_model}")
 
         
         self.stop_words = stop_words
