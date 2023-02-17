@@ -1,5 +1,6 @@
-[![PyPI - License](https://img.shields.io/hexpm/l/plug)](https://github.com/sangcamap/vqda/blob/main/LICENSE)
-[![visitors](https://visitor-badge.glitch.me/badge?page_id=vqda.count_visitors)](https://visitor-badge.glitch.me)
+![GitHub](https://img.shields.io/github/license/sangcamap/vqda?style=for-the-badge)
+![GitHub repo size](https://img.shields.io/github/repo-size/sangcamap/vqda?style=for-the-badge)
+![GitHub Repo stars](https://img.shields.io/github/stars/sangcamap/vqda?style=for-the-badge)
 
 # vqda
 vqda is to provide data augmentation methods for Vietnamese questions.
