@@ -1,4 +1,4 @@
-![GitHub](https://img.shields.io/github/license/sangcamap/vqda?style=for-the-badge)
+![GitHub](https://img.shields.io/github/license/sangcamap/vqda?color=s&style=for-the-badge)
 ![GitHub repo size](https://img.shields.io/github/repo-size/sangcamap/vqda?style=for-the-badge)
 ![GitHub Repo stars](https://img.shields.io/github/stars/sangcamap/vqda?style=for-the-badge)
 
