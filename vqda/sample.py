@@ -2,7 +2,7 @@ from vqda import vqda
 nlp = vqda(
     # Add yours models 
     we_model = './models/vqda_model/gensim_word_embedding/vda.size5000.bin',   # Gensim
-    qr_model = 'sangcamap/t5_vietnamese_qr',  # T5 model
+    qr_model = './models/vqda_model/t5_vietnamese_qr',  # T5 model
 )
 
 question = "Tổ chức nào đang cố gắng giải quyết vấn đề xã hội tại Đông Nam Á?"

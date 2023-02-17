@@ -50,3 +50,12 @@ print(nlp.RS(question))
 #      'Tổ chức nào đang cố gắng giải quyết vấn đề xã hội Tại Đông Nam Á?']
 
 ```
+
+### Question rewriting
+
+```python
+print(nlp.QR(question))
+# >>> ['Tổ chức nào đang cố gắng giải quyết vấn đề xã hội tại Đông Nam Á?', 
+#      'Tổ chức nào đang cố gắng giải quyết vấn đề xã hội ở Đông Nam Á?', 
+#      'Tổ chức nào đang cố gắng giải quyết vấn đề xã hội?']
+```

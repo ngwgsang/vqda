@@ -28,7 +28,8 @@ class vqda:
           raise Exception(f"Can't use {we_model}")
         
         try:
-          self.qr_model = SimpleT5().load_model("t5", qr_model, use_gpu = gpu)
+          self.qr_model = SimpleT5()
+          self.qr_model.load_model("t5", qr_model, use_gpu = gpu)
         except:
           raise Exception(f"Can't use {qr_model}")
 

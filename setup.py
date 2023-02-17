@@ -7,7 +7,7 @@ setuptools.setup(
     author="sangcamap",
     author_email="",
     description="Vietnamese question DA",
-    long_description="Vietnamese question augmentation",
+    long_description="Vietnamese question data augmentation",
     url="https://github.com/sangcamap/vqda.git",
     packages=setuptools.find_packages(),
     install_requires=['transformers', 'sentencepiece', 'underthesea', 'gensim', 'simplet5'],
