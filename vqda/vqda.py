@@ -9,27 +9,38 @@ from random import shuffle
 from tqdm import tqdm
 from glob import glob
 from simplet5 import SimpleT5
+from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
 class vqda:
     
     def __init__(
                 self, 
-                we_model = './models/vqda_model/gensim_word_embedding/', 
-                qr_model = './models/vqda_model/t5_question_rewritting/', 
+                we_model = './models/vqda_model/gensim_word_embedding/vda.size5000.bin', 
+                qr_model = 'sangcamap/t5_vietnamese_qr', 
                 stop_words = [],
+                special_chars = '',
                 gpu = False
                 ):
         warnings.filterwarnings('ignore')
-        self.we_model = Word2Vec.load(we_model)
-        # self.qr_model = SimpleT5.load_model("t5",qr_model , use_gpu = gpu)
-        self.stop_words = stop_words
-    
+        try:
+          self.we_model = Word2Vec.load(we_model)
+        except:
+          print(f"Can't use {we_model}")
+        
+        try:
+          self.qr_model = SimpleT5.load_model("t5", qr_model, use_gpu = gpu)
+        except:
+          print(f"Can't use {qr_model}")
 
+        
+        self.stop_words = stop_words
+        self.special_chars = special_chars
+    
 
     def get_only_chars(self, sentence):
         clean_sentence = ""
         for char in sentence:
-            if char in 'aAàÀảẢãÃáÁạẠăĂằẰẳẲẵẴắẮặẶâÂầẦẩẨẫẪấẤậẬbBcCdDđĐeEèÈẻẺẽẼéÉẹẸêÊềỀểỂễỄếẾệỆ fFgGhHiIìÌỉỈĩĨíÍịỊjJkKlLmMnNoOòÒỏỎõÕóÓọỌôÔồỒổỔỗỖốỐộỘơƠờỜởỞỡỠớỚợỢpPqQrRsStTuUùÙủỦũŨúÚụỤưƯừỪửỬữỮứỨựỰvVwWxXyYỳỲỷỶỹỸýÝỵỴzZ1234567890/':
+            if char in 'aAàÀảẢãÃáÁạẠăĂằẰẳẲẵẴắẮặẶâÂầẦẩẨẫẪấẤậẬbBcCdDđĐeEèÈẻẺẽẼéÉẹẸêÊềỀểỂễỄếẾệỆ fFgGhHiIìÌỉỈĩĨíÍịỊjJkKlLmMnNoOòÒỏỎõÕóÓọỌôÔồỒổỔỗỖốỐộỘơƠờỜởỞỡỠớỚợỢpPqQrRsStTuUùÙủỦũŨúÚụỤưƯừỪửỬữỮứỨựỰvVwWxXyYỳỲỷỶỹỸýÝỵỴzZ1234567890/' + self.special_chars:
                 clean_sentence += char
             else:
                 clean_sentence += ' '
@@ -342,6 +353,45 @@ class vqda:
         else:
           return augmented_sentences
 
-    def QR(self, question, n_aug, prefix = "generate similar questions"):
-        augmented_sentences = self.qr_model.predict(f"{prefix}: {data}", num_return_sequences= n_aug , num_beams= n_aug )
+    def QR(self, question, n_aug = 3, prefix = "generate similar questions"):
+        augmented_sentences = self.qr_model.predict(f"{prefix}: {question}", num_return_sequences= n_aug , num_beams= n_aug )
         return augmented_sentences
+    
+    def BT(self, question, translator = 'vinai'):
+        if translator == 'vinai':
+          tokenizer_vi2en = AutoTokenizer.from_pretrained("vinai/vinai-translate-vi2en", src_lang="vi_VN")
+          tokenizer_en2vi = AutoTokenizer.from_pretrained("vinai/vinai-translate-en2vi", src_lang="en_XX")
+          model_vi2en = AutoModelForSeq2SeqLM.from_pretrained("vinai/vinai-translate-vi2en")
+          model_en2vi = AutoModelForSeq2SeqLM.from_pretrained("vinai/vinai-translate-en2vi")
+
+          def translate_vi2en(vi_text: str) -> str:
+              input_ids = tokenizer_vi2en(vi_text, return_tensors="pt").input_ids
+              output_ids = model_vi2en.generate(
+                  input_ids,
+                  do_sample=True,
+                  top_k=100,
+                  top_p=0.8,
+                  decoder_start_token_id=tokenizer_vi2en.lang_code_to_id["en_XX"],
+                  num_return_sequences=1,
+              )
+              en_text = tokenizer_vi2en.batch_decode(output_ids, skip_special_tokens=True)
+              en_text = " ".join(en_text)
+              return en_text
+
+          def translate_en2vi(en_text: str) -> str:
+              input_ids = tokenizer_en2vi(en_text, return_tensors="pt").input_ids
+              output_ids = model_en2vi.generate(
+                  input_ids,
+                  do_sample=True,
+                  top_k=100,
+                  top_p=0.8,
+                  decoder_start_token_id=tokenizer_en2vi.lang_code_to_id["vi_VN"],
+                  num_return_sequences=1,
+              )
+              vi_text = tokenizer_en2vi.batch_decode(output_ids, skip_special_tokens=True)
+              vi_text = " ".join(vi_text)
+              return vi_text
+        
+        question =  translate_vi2en(question)
+        question =  translate_en2vi(question)
+        return [question]

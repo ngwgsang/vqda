@@ -2,7 +2,7 @@ from vqda import vqda
 nlp = vqda(
     # Add yours models 
     we_model = './models/vqda_model/gensim_word_embedding/vda.size5000.bin',   # Gensim
-    qr_model = './models/vqda_model/t5_question_rewritting/',  # T5 model
+    qr_model = 'sangcamap/t5_vietnamese_qr',  # T5 model
 )
 
 question = "Tổ chức nào đang cố gắng giải quyết vấn đề xã hội tại Đông Nam Á?"
@@ -19,8 +19,9 @@ print(nlp.RI(question))
 # Synonym replacement
 print(nlp.SR(question))
 
-# # nlp.QR(question)
+# Back translation
+print(nlp.BT(question))
 
-# from gensim.models.word2vec import Word2Vec
-# model = Word2Vec.load("./models/vqda_model/gensim_word_embedding/vda.size5000.bin")
-# print(model.wv.most_similar("quê hương"))
+# Question rewritting
+print(nlp.QR(question))
+
