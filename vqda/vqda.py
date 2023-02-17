@@ -20,8 +20,8 @@ class vqda:
                 gpu = False
                 ):
         warnings.filterwarnings('ignore')
-        self.we_model = Word2Vec.load(glob(we_model + "*.bin")[0])
-        self.qr_model = SimpleT5.load_model("t5",qr_model , use_gpu = gpu)
+        self.we_model = Word2Vec.load(we_model)
+        # self.qr_model = SimpleT5.load_model("t5",qr_model , use_gpu = gpu)
         self.stop_words = stop_words
     
 
@@ -48,7 +48,7 @@ class vqda:
 
     def get_synonyms(self, word, top_n = 4):
         try:
-              list_synonym = self.we_model.most_similar(word, topn = top_n )
+              list_synonym = self.we_model.wv.most_similar(word, topn = top_n )
               list_synonym = [token[0] for token in list_synonym] 
         except:
               list_synonym = []                    
@@ -296,7 +296,7 @@ class vqda:
             self, 
             sentence, 
             n_aug = 3, 
-            alpha = 0.2,
+            alpha = 0.3,
             auto_complete_question = True
             ):
         sentence = self.get_only_chars(sentence)
