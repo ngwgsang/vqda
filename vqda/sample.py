@@ -3,9 +3,11 @@ nlp = vqda(
     # Add yours models 
     we_model = './models/vqda_model/gensim_word_embedding/vda.size5000.bin',   # Gensim
     qr_model = './models/vqda_model/t5_vietnamese_qr',  # T5 model
+    vi2en_model = './models/others/vinai-translate-vi2en',
+    en2vi_model = './models/others/vinai-translate-en2vi',
 )
 
-question = "Tổ chức nào đang cố gắng giải quyết vấn đề xã hội tại Đông Nam Á?"
+question = "Shark Hưng đang giữ vị trí nào trong tập đoàn CENGROUP?"
 
 # Random deletion
 print(nlp.RD(question))

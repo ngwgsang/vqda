@@ -16,7 +16,9 @@ class vqda:
     def __init__(
                 self, 
                 we_model = './models/vqda_model/gensim_word_embedding/vda.size5000.bin', 
-                qr_model = 'sangcamap/t5_vietnamese_qr', 
+                qr_model = 'sangcamap/t5_vietnamese_qr',
+                vi2en_model = 'vinai/vinai-translate-vi2en',
+                en2vi_model = 'vinai/vinai-translate-en2vi',
                 stop_words = [],
                 special_chars = '',
                 gpu = False
@@ -32,8 +34,13 @@ class vqda:
           self.qr_model.load_model("t5", qr_model, use_gpu = gpu)
         except:
           raise Exception(f"Can't use {qr_model}")
-
         
+        try:
+          self.vi2en_model = vi2en_model
+          self.en2vi_model = en2vi_model
+        except:
+          raise Exception(f"Can't use {vi2en_model} and {en2vi_model}")
+
         self.stop_words = stop_words
         self.special_chars = special_chars
     
@@ -360,10 +367,13 @@ class vqda:
     
     def BT(self, question, translator = 'vinai'):
         if translator == 'vinai':
-          tokenizer_vi2en = AutoTokenizer.from_pretrained("vinai/vinai-translate-vi2en", src_lang="vi_VN")
-          tokenizer_en2vi = AutoTokenizer.from_pretrained("vinai/vinai-translate-en2vi", src_lang="en_XX")
-          model_vi2en = AutoModelForSeq2SeqLM.from_pretrained("vinai/vinai-translate-vi2en")
-          model_en2vi = AutoModelForSeq2SeqLM.from_pretrained("vinai/vinai-translate-en2vi")
+          # try:
+          tokenizer_vi2en = AutoTokenizer.from_pretrained(self.vi2en_model, src_lang="vi_VN")
+          tokenizer_en2vi = AutoTokenizer.from_pretrained(self.en2vi_model, src_lang="en_XX")
+          model_vi2en = AutoModelForSeq2SeqLM.from_pretrained(self.vi2en_model)
+          model_en2vi = AutoModelForSeq2SeqLM.from_pretrained(self.en2vi_model)
+          # except:
+          #   raise Exception(f"Can't use {self.en2vi_model} and {self.vi2en_model} for back translation")
 
           def translate_vi2en(vi_text: str) -> str:
               input_ids = tokenizer_vi2en(vi_text, return_tensors="pt").input_ids

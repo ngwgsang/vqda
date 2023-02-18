@@ -24,39 +24,54 @@ nlp = vqda(
     qr_model = './models/vqda_model/t5_question_rewritting/',  # T5 model
 )
 
-question = "Tác phẩm nghệ thuật nào được coi là tác phẩm kinh điển của thế kỷ 20?"
+question = "Shark Hưng đang giữ vị trí nào trong tập đoàn CENGROUP?"
 
 # Random deletion
 print(nlp.RD(question))
-# >>> ['Tác phẩm nào được tác phẩm kinh điển của thế kỷ 20?', 
-#      'Tác phẩm nào được coi là tác phẩm của 20?', 
-#      'Tác phẩm được coi là tác phẩm kinh điển thế kỷ 20?']
+# >>> ['Shark đang giữ vị trí trong tập đoàn?', 
+#      'Hưng đang nào trong tập đoàn CENGROUP?', 
+#      'Shark đang giữ vị trí nào trong CENGROUP?']
 
 # Random swap
 print(nlp.RS(question))
-# >>> ['Tác phẩm được nào nghệ thuật coi thế kỷ tác phẩm kinh điển của là 20?', 
-#      '20 nghệ thuật nào coi được là tác phẩm kinh điển của thế kỷ Tác phẩm?', 
-#      'Tác phẩm nghệ thuật nào được của là tác phẩm kinh điển coi 20 thế kỷ?']
+# >>> ['Shark trong đang giữ vị trí nào CENGROUP tập đoàn Hưng?', 
+#      'Tập đoàn Hưng đang giữ nào vị trí trong Shark CENGROUP?', 
+#      'Shark Hưng đang nào CENGROUP giữ trong tập đoàn vị trí?']
 
 # Random insertion
 print(nlp.RI(question))
-# >>> ['Tổ chức nào đang Tổ Chức cố gắng giải quyết vấn đề xã hội tại Đông Nam Á?', 
-#      'Tổ chức nỗ lực nào đang cố gắng giải quyết vấn đề xã hội tại Đông Nam Á?', 
-#      'Tổ chức khắc phục nào đang cố gắng giải quyết vấn đề xã hội tại Đông Nam Á?']
+# >>> ['Shark Hưng đang shark giữ vị trí nào trong tập đoàn CENGROUP?', 
+#      'Shark duy trì Hưng đang giữ vị trí nào trong tập đoàn CENGROUP?', 
+#      'Shark League Two Hưng đang giữ vị trí nào trong tập đoàn CENGROUP?']
 
 # Synonym replacement
 print(nlp.RS(question))
-# >>> ['Tổ chức nào đang cố gắng khắc phục vấn đề xã hội tại Đông Nam Á?', 
-#      'Tổ chức thay thế nào đang cố gắng giải quyết vấn đề xã hội tại Đông Nam Á?', 
-#      'Tổ chức nào đang cố gắng giải quyết vấn đề xã hội Tại Đông Nam Á?']
+# >>> ['Shark Phước đang giữ vị trí nào trong tập đoàn CENGROUP?', 
+#      'Shark Hưng muốn giữ vị trí nào trong tập đoàn CENGROUP?', 
+#      'Shark Hưng đang giữ vị trí nào cạnh tập đoàn CENGROUP?']
 
+```
+
+### Back translation
+
+```python
+from vqda import vqda
+
+nlp = vqda()
+question = "Shark Hưng đang giữ vị trí nào trong tập đoàn CENGROUP?"
+print(nlp.BT(question))
+# >>> ['Shark Hưng đang nắm giữ vị trí nào trong CENGROUP Group?']
 ```
 
 ### Question rewriting
 
 ```python
+from vqda import vqda
+
+nlp = vqda()
+question = "Shark Hưng đang giữ vị trí nào trong tập đoàn CENGROUP?"
 print(nlp.QR(question))
-# >>> ['Tổ chức nào đang cố gắng giải quyết vấn đề xã hội tại Đông Nam Á?', 
-#      'Tổ chức nào đang cố gắng giải quyết vấn đề xã hội ở Đông Nam Á?', 
-#      'Tổ chức nào đang cố gắng giải quyết vấn đề xã hội?']
+# >>> ['Shark Hưng đang giữ vị trí nào trong tập đoàn CENGROUP?', 
+#      'Shark Hưng đang giữ chức vụ nào trong tập đoàn CENGROUP?', 
+#      'Trong tập đoàn CENGROUP, Shark Hưng đang giữ vị trí nào?']
 ```
