@@ -69,9 +69,14 @@ print(nlp.BT(question))
 from vqda import vqda
 
 nlp = vqda()
-question = "Shark Hưng đang giữ vị trí nào trong tập đoàn CENGROUP?"
-print(nlp.QR(question))
-# >>> ['Shark Hưng đang giữ vị trí nào trong tập đoàn CENGROUP?', 
-#      'Shark Hưng đang giữ chức vụ nào trong tập đoàn CENGROUP?', 
-#      'Trong tập đoàn CENGROUP, Shark Hưng đang giữ vị trí nào?']
+question = "Tại sao người ta dùng giun đất làm mồi câu cá?"
+print(nlp.QP(question, n_aug = 5))
+# >>> ['Vì sao người ta dùng giun đất làm mồi câu cá?',
+# 'Tại sao người ta dùng giun đất làm mồi câu cá?',
+# 'Lý do người ta dùng giun đất làm mồi câu cá?',
+# 'Vì sao người ta sử dụng giun đất làm mồi câu cá?',
+# 'Vì sao người ta dùng giun đất để câu cá?']
 ```
+
+
+Example in [Notebook](https://github.com/sangcamap/vqda/blob/main/notebook.ipynb)
