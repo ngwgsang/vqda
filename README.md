@@ -8,7 +8,12 @@ vqda is to provide data augmentation methods for Vietnamese questions.
 ## Install
 
 ```
-pip install git+https://github.com/sangcamap/vqda.git
+# VQDA
+!pip install git+https://github.com/sangcamap/vqda.git
+
+# Model
+!git clone https://huggingface.co/SCM-LAB/vietnamese_word_embedding_5000
+!git clone https://huggingface.co/SCM-LAB/vietnamese_question_paraphrasing_ViT5_base
 ```
 
 ## Quick start
@@ -18,11 +23,7 @@ pip install git+https://github.com/sangcamap/vqda.git
 ```python
 from vqda import vqda
 
-nlp = vqda(
-    # Add yours models 
-    we_model = './models/vqda_model/gensim_word_embedding/vda.size5000.bin',   # Gensim
-    qr_model = './models/vqda_model/t5_question_rewritting/',  # T5 model
-)
+nlp = vqda()
 
 question = "Shark Hưng đang giữ vị trí nào trong tập đoàn CENGROUP?"
 
