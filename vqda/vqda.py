@@ -15,25 +15,25 @@ class vqda:
     
     def __init__(
                 self, 
-                we_model = './models/vqda_model/gensim_word_embedding/vda.size5000.bin', 
-                qr_model = 'sangcamap/t5_vietnamese_qr',
+                word_embedding_model = './vietnamese_word_embedding_5000', 
+                question_paraphrasing_model = './vietnamese_question_paraphrasing_ViT5_base',
                 vi2en_model = 'vinai/vinai-translate-vi2en',
                 en2vi_model = 'vinai/vinai-translate-en2vi',
                 stop_words = [],
                 special_chars = '',
-                gpu = False
-                ):
+                gpu = False):
+
         warnings.filterwarnings('ignore')
         try:
-          self.we_model = Word2Vec.load(we_model)
+          self.word_embedding_model = Word2Vec.load( glob(word_embedding_model + "/*.bin")[0])
         except:
-          raise Exception(f"Can't use {we_model}")
+          raise Exception(f"Can't use {word_embedding_model}")
         
         try:
-          self.qr_model = SimpleT5()
-          self.qr_model.load_model("t5", qr_model, use_gpu = gpu)
+          self.question_paraphrasing_model = SimpleT5()
+          self.question_paraphrasing_model.load_model("t5", question_paraphrasing_model, use_gpu = gpu)
         except:
-          raise Exception(f"Can't use {qr_model}")
+          raise Exception(f"Can't use {question_paraphrasing_model}")
         
         try:
           self.vi2en_model = vi2en_model
@@ -67,7 +67,7 @@ class vqda:
 
     def get_synonyms(self, word, top_n = 4):
         try:
-              list_synonym = self.we_model.wv.most_similar(word, topn = top_n )
+              list_synonym = self.word_embedding_model.wv.most_similar(word, topn = top_n )
               list_synonym = [token[0] for token in list_synonym] 
         except:
               list_synonym = []                    
@@ -361,8 +361,8 @@ class vqda:
         else:
           return augmented_sentences
 
-    def QR(self, question, n_aug = 3, prefix = "generate similar questions"):
-        augmented_sentences = self.qr_model.predict(f"{prefix}: {question}", num_return_sequences= n_aug , num_beams= n_aug )
+    def QP(self, question, n_aug = 3, prefix = "question paraphrasing"):
+        augmented_sentences = self.question_paraphrasing_model.predict(f"{prefix}: {question}", num_return_sequences= n_aug , num_beams= n_aug )
         return augmented_sentences
     
     def BT(self, question, translator = 'vinai'):
@@ -406,3 +406,5 @@ class vqda:
         question =  translate_vi2en(question)
         question =  translate_en2vi(question)
         return [question]
+
+
