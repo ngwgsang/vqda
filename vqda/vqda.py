@@ -36,8 +36,10 @@ class vqda:
           raise Exception(f"Can't use {question_paraphrasing_model}")
         
         try:
-          self.vi2en_model = vi2en_model
-          self.en2vi_model = en2vi_model
+          self.tokenizer_vi2en = AutoTokenizer.from_pretrained(vi2en_model, src_lang="vi_VN")
+          self.tokenizer_en2vi = AutoTokenizer.from_pretrained(en2vi_model, src_lang="en_XX")
+          self.model_vi2en = AutoModelForSeq2SeqLM.from_pretrained(vi2en_model)
+          self.model_en2vi = AutoModelForSeq2SeqLM.from_pretrained(en2vi_model)
         except:
           raise Exception(f"Can't use {vi2en_model} and {en2vi_model}")
 
@@ -367,39 +369,31 @@ class vqda:
     
     def BT(self, question, translator = 'vinai'):
         if translator == 'vinai':
-          # try:
-          tokenizer_vi2en = AutoTokenizer.from_pretrained(self.vi2en_model, src_lang="vi_VN")
-          tokenizer_en2vi = AutoTokenizer.from_pretrained(self.en2vi_model, src_lang="en_XX")
-          model_vi2en = AutoModelForSeq2SeqLM.from_pretrained(self.vi2en_model)
-          model_en2vi = AutoModelForSeq2SeqLM.from_pretrained(self.en2vi_model)
-          # except:
-          #   raise Exception(f"Can't use {self.en2vi_model} and {self.vi2en_model} for back translation")
-
           def translate_vi2en(vi_text: str) -> str:
-              input_ids = tokenizer_vi2en(vi_text, return_tensors="pt").input_ids
-              output_ids = model_vi2en.generate(
+              input_ids = self.tokenizer_vi2en(vi_text, return_tensors="pt").input_ids
+              output_ids = self.model_vi2en.generate(
                   input_ids,
                   do_sample=True,
                   top_k=100,
                   top_p=0.8,
-                  decoder_start_token_id=tokenizer_vi2en.lang_code_to_id["en_XX"],
+                  decoder_start_token_id=self.tokenizer_vi2en.lang_code_to_id["en_XX"],
                   num_return_sequences=1,
               )
-              en_text = tokenizer_vi2en.batch_decode(output_ids, skip_special_tokens=True)
+              en_text = self.tokenizer_vi2en.batch_decode(output_ids, skip_special_tokens=True)
               en_text = " ".join(en_text)
               return en_text
 
           def translate_en2vi(en_text: str) -> str:
-              input_ids = tokenizer_en2vi(en_text, return_tensors="pt").input_ids
-              output_ids = model_en2vi.generate(
+              input_ids = self.tokenizer_en2vi(en_text, return_tensors="pt").input_ids
+              output_ids = self.model_en2vi.generate(
                   input_ids,
                   do_sample=True,
                   top_k=100,
                   top_p=0.8,
-                  decoder_start_token_id=tokenizer_en2vi.lang_code_to_id["vi_VN"],
+                  decoder_start_token_id=self.tokenizer_en2vi.lang_code_to_id["vi_VN"],
                   num_return_sequences=1,
               )
-              vi_text = tokenizer_en2vi.batch_decode(output_ids, skip_special_tokens=True)
+              vi_text = self.tokenizer_en2vi.batch_decode(output_ids, skip_special_tokens=True)
               vi_text = " ".join(vi_text)
               return vi_text
         
