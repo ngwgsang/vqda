@@ -8,7 +8,12 @@ vqda is to provide data augmentation methods for Vietnamese questions.
 ## Install
 
 ```
-pip install git+https://github.com/sangcamap/vqda.git
+# VQDA
+!pip install git+https://github.com/sangcamap/vqda.git
+
+# Model
+!git clone https://huggingface.co/SCM-LAB/vietnamese_word_embedding_5000
+!git clone https://huggingface.co/SCM-LAB/vietnamese_question_paraphrasing_ViT5_base
 ```
 
 ## Quick start
@@ -18,11 +23,7 @@ pip install git+https://github.com/sangcamap/vqda.git
 ```python
 from vqda import vqda
 
-nlp = vqda(
-    # Add yours models 
-    we_model = './models/vqda_model/gensim_word_embedding/vda.size5000.bin',   # Gensim
-    qr_model = './models/vqda_model/t5_question_rewritting/',  # T5 model
-)
+nlp = vqda()
 
 question = "Shark Hưng đang giữ vị trí nào trong tập đoàn CENGROUP?"
 
@@ -69,9 +70,14 @@ print(nlp.BT(question))
 from vqda import vqda
 
 nlp = vqda()
-question = "Shark Hưng đang giữ vị trí nào trong tập đoàn CENGROUP?"
-print(nlp.QR(question))
-# >>> ['Shark Hưng đang giữ vị trí nào trong tập đoàn CENGROUP?', 
-#      'Shark Hưng đang giữ chức vụ nào trong tập đoàn CENGROUP?', 
-#      'Trong tập đoàn CENGROUP, Shark Hưng đang giữ vị trí nào?']
+question = "Tại sao người ta dùng giun đất làm mồi câu cá?"
+print(nlp.QP(question, n_aug = 5))
+# >>> ['Vì sao người ta dùng giun đất làm mồi câu cá?',
+# 'Tại sao người ta dùng giun đất làm mồi câu cá?',
+# 'Lý do người ta dùng giun đất làm mồi câu cá?',
+# 'Vì sao người ta sử dụng giun đất làm mồi câu cá?',
+# 'Vì sao người ta dùng giun đất để câu cá?']
 ```
+
+
+Example in [Notebook](https://github.com/sangcamap/vqda/blob/main/notebook.ipynb)
